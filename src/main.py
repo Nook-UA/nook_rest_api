@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.endpoints.authentication import router as auth_router
+
 # TODO: Add a description here to appear in the Swagger documentation
 description = """
 """
@@ -25,6 +27,8 @@ app.add_middleware(
 
 # TODO: Define set ofendpoints here like this:
 # app.include_router(<name of the set of endpoints>, tags=["<tag name>"], prefix="/<prefix>")
+
+app.include_router(router=auth_router, prefix="/api")
 
 @app.get("/")
 def root():
