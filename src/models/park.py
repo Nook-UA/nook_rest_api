@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, LargeBinary, ForeignKey
 from .utils import *
 
-park = Table(
+park_table = Table(
     "park",
     metadata,
     id_,

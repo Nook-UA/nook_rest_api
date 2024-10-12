@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, LargeBinary
 from .utils import *
 
-park = Table(
+client_table = Table(
     "client",
     metadata,
     id_,
