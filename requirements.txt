@@ -1,2 +1,2 @@
 fastapi[standard]
-SQLAlchemy
+SQLAlchemy==2.0.35
