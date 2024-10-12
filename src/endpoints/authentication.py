@@ -8,7 +8,7 @@ class Account(BaseModel):
     token: str
 
 router = fastapi.APIRouter(prefix="/auth", tags=["authentication"])
-accounts = {}
+accounts = {"admin":Account(username="admin",password="admin2024",token=str(uuid.uuid4()))}
 
 @router.post("/signup")
 async def signup(username: str, password: str) -> Account:
