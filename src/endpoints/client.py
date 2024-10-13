@@ -1,5 +1,6 @@
 from ..schemas.client import Client
 from fastapi import FastAPI, HTTPException, APIRouter
+from http import HTTPStatus
 
 router = APIRouter(tags=["client"], prefix="/client")
 
@@ -13,4 +14,7 @@ clients = [
 def get_client(client_id: int = None) -> list[Client] | Client:
     if not client_id:
         return clients
-    return clients[client_id]
+    try:
+        return clients[client_id]
+    except IndexError:
+        raise HTTPException(HTTPStatus.BAD_REQUEST, detail=f"Client with {client_id=} does not exist.")

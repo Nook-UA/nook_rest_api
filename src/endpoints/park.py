@@ -1,7 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from ..schemas.park import Park
 from .client import clients
 from ..repositories.park import insert_park, select_park, update_park, delete_park
+from http import HTTPStatus
+
 
 router = APIRouter(tags=["park"], prefix="/park")
 
@@ -48,4 +50,7 @@ def get_client_parks(client_id: int = None, location: str = None) -> list[Park]:
 
 @router.get("/{park_id}")
 def get_park(park_id: int = None) -> Park:
-    return parks[park_id]
+    try:
+        return parks[park_id]
+    except IndexError:
+        raise HTTPException(HTTPStatus.BAD_REQUEST, detail=f"Park with {park_id=} does not exist.")
