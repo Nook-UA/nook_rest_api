@@ -1,12 +1,51 @@
-from fastapi import FastAPI, HTTPException, APIRouter
+from fastapi import APIRouter
 from ..schemas.park import Park
+from .client import clients
+from ..repositories.park import insert_park, select_park, update_park, delete_park
 
-router = APIRouter(
-    tags=["park"],
-    prefix="/park"
-)
+router = APIRouter(tags=["park"], prefix="/park")
 
 
-@router.get("/{client_id}")
-def get_client_parks(client_id: int) -> int:
-    return client_id
+parks = [
+    Park(
+        id=0,
+        name="Shopping",
+        picture="Leiria.png",
+        location="Leiria",
+        total_spots=12,
+        owner=clients[0],
+    ),
+    Park(
+        id=1,
+        name="Garagem",
+        picture="Garagem.png",
+        location="Leiria",
+        total_spots=20,
+        owner=clients[1],
+    ),
+    Park(
+        id=2,
+        name="Forum",
+        picture="Forum.png",
+        location="Aveiro",
+        total_spots=8,
+        owner=clients[1],
+    ),
+]
+
+
+@router.get("")
+def get_client_parks(client_id: int = None, location: str = None) -> list[Park]:
+    response = parks
+    if client_id:
+        response = [park for park in response if park.owner.id == client_id]
+    if location:
+        response = [
+            park for park in response if park.location.lower() == location.lower()
+        ]
+    return response
+
+
+@router.get("/{park_id}")
+def get_park(park_id: int = None) -> Park:
+    return parks[park_id]
