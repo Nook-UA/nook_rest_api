@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .endpoints.park import router as park_router
+from .endpoints.client import router as client_router
 
 # TODO: Add a description here to appear in the Swagger documentation
 description = """
@@ -28,6 +29,7 @@ app.add_middleware(
 # app.include_router(<name of the set of endpoints>, tags=["<tag name>"], prefix="/<prefix>")
 
 app.include_router(park_router)
+app.include_router(client_router)
 
 
 @app.get("/")
