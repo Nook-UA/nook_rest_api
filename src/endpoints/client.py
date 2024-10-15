@@ -15,13 +15,13 @@ def get_client(client_id: int = None) -> list[Client] | Client:
     """Retrieve Collection of Clients or a single Client
 
     Args:
-        client_id (int, optional): Indicates a specific Client. Defaults to Any.
+       - client_id (int, optional): Indicates a specific Client. Defaults to Any.
 
     Raises:
-        HTTPException: If the Client does not exist.
+       - HTTPException: If the Client does not exist.
 
     Returns:
-        list[Client] | Client: List of all Clients or a single Client.
+       - list[Client] | Client: List of all Clients or a single Client.
     """
     if not client_id:
         return clients

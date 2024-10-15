@@ -61,13 +61,13 @@ def get_park(park_id: int) -> Park:
     """Retrive Park by park_id
 
     Args:
-        park_id (int): Indicates the desired Park.
+       - park_id (int): Indicates the desired Park.
 
     Raises:
-        HTTPException: If the park_id does not exist.
+       - HTTPException: If the park_id does not exist.
 
     Returns:
-        Park: The Park with the given park_id.
+       - Park: The Park with the given park_id.
     """
     try:
         return parks[park_id]

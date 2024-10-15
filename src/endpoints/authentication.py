@@ -15,14 +15,14 @@ async def signup(username: str, password: str) -> Account:
     """Create a new Account
 
     Args:
-        username (str): User display name
-        password (str): User secret password
+       - username (str): User display name
+       - password (str): User secret password
 
     Raises:
-        await: fastapi.HTTPException: If the username is already in use
+       - await: fastapi.HTTPException: If the username is already in use
 
     Returns:
-        Account: The newly created Account
+       - Account: The newly created Account
     """
 
     if username in accounts.keys():
