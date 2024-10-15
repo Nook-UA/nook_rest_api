@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from ..schemas.park import Park
 from .client import clients
-from ..repositories.park import insert_park, select_park, update_park, delete_park
 from http import HTTPStatus
 
 
@@ -38,6 +37,15 @@ parks = [
 
 @router.get("")
 def get_client_parks(client_id: int = None, location: str = None) -> list[Park]:
+    """Retrieve Collection of Parks
+
+    Args:
+       - client_id (int, optional): Allows to filter Parks by owner_id. Defaults to Any.
+       - location (str, optional): Allows to filter by location. Defaults to Any.
+
+    Returns:
+       - list[Park]: List of all the Parks matching the filter conditions.
+    """
     response = parks
     if client_id:
         response = [park for park in response if park.owner.id == client_id]
@@ -49,7 +57,18 @@ def get_client_parks(client_id: int = None, location: str = None) -> list[Park]:
 
 
 @router.get("/{park_id}")
-def get_park(park_id: int = None) -> Park:
+def get_park(park_id: int) -> Park:
+    """Retrive Park by park_id
+
+    Args:
+        park_id (int): Indicates the desired Park.
+
+    Raises:
+        HTTPException: If the park_id does not exist.
+
+    Returns:
+        Park: The Park with the given park_id.
+    """
     try:
         return parks[park_id]
     except IndexError:
