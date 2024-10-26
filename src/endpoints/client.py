@@ -1,6 +1,7 @@
-from ..schemas.client import Client
+from ..schemas.client import ClientCreate, ClientSchema
 from fastapi import APIRouter, Depends
 from ..repositories.client import create_client, get_client_by_id
+from ..models.client import Client
 from sqlalchemy.orm import Session
 from psycopg2.errors import UndefinedTable
 from sqlalchemy.exc import ProgrammingError
@@ -15,7 +16,7 @@ clients = [
 ]
 
 @router.post("")
-def create_client2(client: Client) -> Client:
+def create_client2(client: ClientCreate) -> ClientSchema:
     """Create a new Client
 
     Args:
@@ -30,11 +31,11 @@ def create_client2(client: Client) -> Client:
         return {"error": str(e)}
 
 @router.get("")
-def get_client(client_id: int = None) -> list[Client] | Client:
+def get_client(client_id: int = None) -> list[ClientSchema] | ClientSchema:
     if not client_id:
         return clients
     try:
-        return get_client_by_id(client_id, database.session) if client_id else None
+        return get_client_by_id(client_id, database.session)
     except ProgrammingError:
         return {"error": "BLAH Server Error"}
     except UndefinedTable:
