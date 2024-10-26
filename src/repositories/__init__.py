@@ -1,4 +1,4 @@
-__all__ = ["connection", "session"]
+__all__ = ["database"]
 
 from dotenv import load_dotenv
 from os import getenv
@@ -9,6 +9,7 @@ from sqlalchemy_utils import database_exists, create_database
 class __Database:
     __engine = None
     __SessionLocal = None
+    __Base = None
 
     def __init__(self):
         self.__save_connection_string(*self.__load_database_info())
@@ -26,15 +27,19 @@ class __Database:
 
     def __load_database_info(self):
         load_dotenv(".env")
-        fields = ["USER_N", "PASSWORD", "HOST", "PORT", "DATABASE"]
+        fields = ["USER_NAME", "PASSWORD", "HOST", "PORT", "DATABASE_NAME"]
         return tuple(getenv(term) for term in fields)
 
     def init_database(self):
-        self.Base.metadata.create_all(bind=self.__engine)
+        self.__Base.metadata.create_all(bind=self.__engine)
 
     @property
     def session(self):
         return self.__SessionLocal()
+    
+    @property
+    def Base(self):
+        return self.__Base
 
     @property
     def conn(self):
