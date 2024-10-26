@@ -1,8 +1,9 @@
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 from .utils import *
+from ..repositories import database
 
-class Client(Base):
+class Client(database.Base):
     
     __tablename__ = "client"
     

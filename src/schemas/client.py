@@ -7,3 +7,6 @@ class Client(BaseModel):
     phone: str
     email: str
     picture: str
+
+    class Config:
+        from_attributes = True

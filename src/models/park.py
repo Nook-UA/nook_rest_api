@@ -1,13 +1,15 @@
-from sqlalchemy import Table, Column, Integer, String, LargeBinary, ForeignKey
+from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey
 from .utils import *
+from ..repositories import database
 
-park_table = Table(
-    "park",
-    metadata,
-    id_,
-    name,
-    Column("picture", LargeBinary),
-    Column("location", String),
-    Column("total_spots", Integer),
-    Column("owner", Integer, ForeignKey("client.id")),
-)
+class Park(database.Base):
+
+    __tablename__ = "park"
+
+    id = id_
+    name = name
+    picture = Column("picture", LargeBinary)
+    location = Column("location", String)
+    total_spots = Column("total_spots", Integer)
+    owner = Column(Integer, ForeignKey("client.id"))
+
