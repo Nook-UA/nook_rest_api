@@ -18,7 +18,7 @@ class __Database:
             create_database(self.conn_string)
 
         self.__engine = create_engine(self.conn_string, echo=False)
-        self.Base = declarative_base(metadata=MetaData())
+        self.__Base = declarative_base(metadata=MetaData())
         self.__SessionLocal = sessionmaker(autoflush=False, bind=self.__engine)
 
     def __save_connection_string(self, user, password, host, port, database):
