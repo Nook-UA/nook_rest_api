@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from ..schemas.park import Park
 from .client import clients
-from ..repositories.park import insert_park, select_park, update_park, delete_park
+# from ..repositories.park import insert_park, select_park, update_park, delete_park
 from http import HTTPStatus
 
 
