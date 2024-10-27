@@ -16,7 +16,7 @@ clients = [
 ]
 
 @router.post("")
-def create_client2(client: ClientCreate) -> ClientSchema:
+def create_client2(client: ClientCreate, session: Session= Depends(database.session)) -> ClientSchema:
     """Create a new Client
 
     Args:
@@ -26,12 +26,12 @@ def create_client2(client: ClientCreate) -> ClientSchema:
         - Client: Created Client.
     """
     try:
-        return create_client(client, database.session)
+        return create_client(client, session)
     except Exception as e:
         return {"error": str(e)}
 
 @router.get("")
-def get_client(client_id: int = None) -> list[ClientSchema] | ClientSchema:
+def get_client(client_id: int = None, session: Session= Depends(database.session)) -> list[ClientSchema] | ClientSchema:
     """Retrieve Collection of Clients or a single Client
 
     Args:
@@ -46,7 +46,7 @@ def get_client(client_id: int = None) -> list[ClientSchema] | ClientSchema:
     if not client_id:
         return clients
     try:
-        return get_client_by_id(client_id, database.session)
+        return get_client_by_id(client_id, session)
     except ProgrammingError:
         return {"error": "BLAH Server Error"}
     except UndefinedTable:

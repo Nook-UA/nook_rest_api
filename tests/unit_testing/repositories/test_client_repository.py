@@ -1,18 +1,16 @@
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import sessionmaker, declarative_base
 from psycopg2.errors import UndefinedTable
 from src.repositories.client import create_client, get_client_by_id
-from src.models.client import Client
 from src.schemas.client import ClientCreate
-from src.repositories import *
+from src.models.client import Client
 
-Base = database.Base
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
 @pytest.fixture(scope="function")
 def db_session():

@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 
 from ..models.client import Client
 from ..schemas.client import ClientCreate
-from ..repositories import database
 
 from psycopg2.errors import UndefinedTable
 

@@ -36,7 +36,7 @@ class __Database:
 
     @property
     def session(self):
-        return self.__SessionLocal()
+        return self.__SessionLocal
     
     @property
     def Base(self):
@@ -45,5 +45,6 @@ class __Database:
     @property
     def conn(self):
         return self.__engine.connect()
+
 
 database = __Database()
