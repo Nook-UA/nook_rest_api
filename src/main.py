@@ -34,6 +34,7 @@ app.add_middleware(
 app.include_router(router=auth_router, prefix="/api")
 app.include_router(park_router)
 app.include_router(client_router)
+""" Demonstration router for testing purposes of jwt token verification"""
 app.include_router(test_router)
 
 
