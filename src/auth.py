@@ -63,7 +63,7 @@ class CognitoJWTAuthorizer:
                 options={
                     "verify_aud": False,
                     "verify_signature": True,
-                    "verify_exp": False,
+                    "verify_exp": True,
                     "verify_iss": True,
                     "require": ["token_use", "exp", "iss", "sub"],
                 },
