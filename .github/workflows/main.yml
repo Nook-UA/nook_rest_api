@@ -8,11 +8,11 @@ on:
     types: [opened, synchronize, reopened]
 
 env:
-  USER_NAME=test_user
-  PASSWORD=test_pass
-  HOST=localhost
-  PORT=5432
-  DATABASE_NAME=test_db
+  USER_NAME: test_user
+  PASSWORD: test_pass
+  HOST: localhost
+  PORT: 5432
+  DATABASE_NAME: test_db
 
 jobs:
   build:
