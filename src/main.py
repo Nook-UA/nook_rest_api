@@ -2,11 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .endpoints.park import router as park_router
 from .endpoints.client import router as client_router
-from .repositories import database
 
 from src.endpoints.authentication import router as auth_router
-
-database.init_database()
 
 # TODO: Add a description here to appear in the Swagger documentation
 description = """

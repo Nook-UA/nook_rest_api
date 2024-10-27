@@ -20,6 +20,7 @@ class __Database:
         self.__engine = create_engine(self.conn_string, echo=False)
         self.__Base = declarative_base(metadata=MetaData())
         self.__SessionLocal = sessionmaker(autoflush=False, bind=self.__engine)
+        self.__init_database()
 
     def __save_connection_string(self, user, password, host, port, database):
         print(user, password, host, port, database)
@@ -30,7 +31,7 @@ class __Database:
         fields = ["USER_NAME", "PASSWORD", "HOST", "PORT", "DATABASE_NAME"]
         return tuple(getenv(term) for term in fields)
 
-    def init_database(self):
+    def __init_database(self):
         self.__Base.metadata.create_all(bind=self.__engine)
 
     @property
