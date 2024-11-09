@@ -2,7 +2,7 @@ name: Run Unit Test via Pytest
 
 on:
   push: 
-    branches: ['main', 'dev']
+    branches: ['main', 'dev', 'ESNOOK-71-Configure-Testing-Database']
 
   pull_request:
     types: [opened, synchronize, reopened]
