@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "api"
+version = "0.1.0"
+description = ""
+authors = ["zegameiro <jose.mcgameiro@ua.pt>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["standard"], version = "^0.115.4"}
+sqlalchemy = "^2.0.36"
+sqlalchemy-utils = "^0.41.2"
+coverage-badge = "^1.1.2"
+ruff = "^0.7.3"
+psycopg2-binary = "^2.9.10"
+requests = "^2.32.3"
+httpx = "^0.27.2"
+pyjwt = "^2.9.0"
+cryptography = "^43.0.3"
+tox = "^4.23.2"
+testcontainers = "^4.8.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+pytest-cov = "^6.0.0"
+coverage = "^7.6.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
