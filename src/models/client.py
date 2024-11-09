@@ -1,16 +1,22 @@
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from .utils import *
-from ..repositories import database
+from sqlalchemy import (
+    Column,
+    Integer,
+    Identity,
+    String,
+)
 
-class Client(database.Base):
+from ..db.database import Base
+
+class Client(Base):
     
     __tablename__ = "client"
     
-    id = id_
-    name = name 
-    phone = phone
-    email = email
+    id = Column("id", Integer, Identity(start=1, increment=1), primary_key=True)
+    name = Column("name", String)
+    phone = Column("phone", String)
+    email = Column("mail", String)
     picture = Column(String)
     
     # client = relationship("Client", back_populates="client")

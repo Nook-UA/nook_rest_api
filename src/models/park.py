@@ -1,13 +1,12 @@
-from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey
-from .utils import *
-from ..repositories import database
+from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey, Identity
+from ..db.database import Base
 
-class Park(database.Base):
+class Park(Base):
 
     __tablename__ = "park"
 
-    id = id_
-    name = name
+    id = Column("id", Integer, Identity(start=1, increment=1), primary_key=True)
+    name = Column("name", String)
     picture = Column("picture", LargeBinary)
     location = Column("location", String)
     total_spots = Column("total_spots", Integer)

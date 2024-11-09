@@ -1,22 +1,22 @@
-from ..schemas.client import ClientCreate, ClientSchema
 from fastapi import APIRouter, Depends
-from ..repositories.client import create_client, get_client_by_id
-from ..models.client import Client
 from sqlalchemy.orm import Session
 from psycopg2.errors import UndefinedTable
 from sqlalchemy.exc import ProgrammingError
 
-from ..repositories import database 
+from ..db.database import get_db
+from ..schemas.client import ClientCreate, ClientSchema
+from ..repositories.client import create_client, get_client_by_id
+from ..schemas.client import ClientSchema
 
 router = APIRouter(tags=["client"], prefix="/client")
 
 clients = [
-    Client(id=0, name="Foo", phone="123456789", email="@this", picture="google.com"),
-    Client(id=1, name="Bar", phone="987654321", email="@that", picture="bing.com"),
+    ClientSchema(id=0, name="Foo", phone="123456789", email="@this", picture="google.com"),
+    ClientSchema(id=1, name="Bar", phone="987654321", email="@that", picture="bing.com"),
 ]
 
 @router.post("")
-def create_client2(client: ClientCreate, session: Session= Depends(database.session)) -> ClientSchema:
+def create_client2(client: ClientCreate, session: Session= Depends(get_db)) -> ClientSchema:
     """Create a new Client
 
     Args:
@@ -31,7 +31,7 @@ def create_client2(client: ClientCreate, session: Session= Depends(database.sess
         return {"error": str(e)}
 
 @router.get("")
-def get_client(client_id: int = None, session: Session= Depends(database.session)) -> list[ClientSchema] | ClientSchema:
+def get_client(client_id: int = None, session: Session= Depends(get_db)) -> list[ClientSchema] | ClientSchema:
     """Retrieve Collection of Clients or a single Client
 
     Args:
