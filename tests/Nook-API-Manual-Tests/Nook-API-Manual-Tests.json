@@ -1,0 +1,76 @@
+{
+  "name": "Nook-API-Manual-Tests",
+  "version": "1",
+  "items": [
+    {
+      "type": "folder",
+      "name": "client",
+      "items": [
+        {
+          "type": "http",
+          "name": "Create a new user",
+          "seq": 2,
+          "request": {
+            "url": "http://localhost:8000/client",
+            "method": "POST",
+            "headers": [],
+            "params": [],
+            "body": {
+              "mode": "json",
+              "json": "{\n  \"name\": \"client\",\n  \"phone\": \"987654321\",\n  \"email\": \"valar@morghulis.got\",\n  \"picture\": \"string\"\n}",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "auth": {
+              "mode": "none"
+            }
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get User by user_id",
+          "seq": 1,
+          "request": {
+            "url": "http://localhost:8000/client?client_id=1",
+            "method": "GET",
+            "headers": [],
+            "params": [
+              {
+                "name": "client_id",
+                "value": "1",
+                "type": "query",
+                "enabled": true
+              }
+            ],
+            "body": {
+              "mode": "none",
+              "formUrlEncoded": [],
+              "multipartForm": []
+            },
+            "script": {},
+            "vars": {},
+            "assertions": [],
+            "tests": "",
+            "auth": {
+              "mode": "none"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "environments": [],
+  "brunoConfig": {
+    "version": "1",
+    "name": "Nook-API-Manual-Tests",
+    "type": "collection",
+    "ignore": [
+      "node_modules",
+      ".git"
+    ]
+  }
+}

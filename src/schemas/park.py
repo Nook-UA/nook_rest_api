@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from .client import Client
+from .client import ClientSchema
 
 
 class Park(BaseModel):
@@ -8,4 +8,4 @@ class Park(BaseModel):
     picture: str
     location: str
     total_spots: int
-    owner: Client
+    owner: ClientSchema
