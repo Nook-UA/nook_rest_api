@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, LargeBinary, ForeignKey, Identity
 from ..db.database import Base
 
+
 class Park(Base):
 
     __tablename__ = "park"
@@ -10,5 +11,5 @@ class Park(Base):
     picture = Column("picture", LargeBinary)
     location = Column("location", String)
     total_spots = Column("total_spots", Integer)
+    rtsp_url = Column("rtsp_url", String)
     owner = Column(Integer, ForeignKey("client.id"))
-
