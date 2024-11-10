@@ -3,12 +3,9 @@ from fastapi.testclient import TestClient
 from unittest.mock import patch
 from src.main import app
 
-
 BASE_URL = "http://localhost:8000/client"
 
 CLIENT = TestClient(app)
-
-
 
 def test_create_client_endpoint():
     test_payload = {

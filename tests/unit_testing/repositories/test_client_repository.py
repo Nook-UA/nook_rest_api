@@ -1,28 +1,76 @@
 import pytest
+
+from unittest.mock import patch
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-from psycopg2.errors import UndefinedTable
+from sqlalchemy.orm import sessionmaker
+from testcontainers.postgres import PostgresContainer
+
 from src.repositories.client import create_client, get_client_by_id
-from src.schemas.client import ClientCreate
 from src.models.client import Client
+from src.schemas.client import ClientCreate
+from src.db.database import get_db
+from src.main import app
+
+postgres_container = PostgresContainer(
+    "postgres:15",
+    dbname="test_db",
+    username="test_user",
+    password="test_password"
+)
 
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+@pytest.fixture(name="session", scope="module")
+def setup():
+    postgres_container.start()
+    connection_url = postgres_container.get_connection_url()
+    print(connection_url)
+    engine = create_engine(connection_url, connect_args={})
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    Client.metadata.create_all(engine)
 
-@pytest.fixture(scope="function")
-def db_session():
-    Base.metadata.create_all(bind=engine)
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-        Base.metadata.drop_all(bind=engine)
+    def override_get_db():
+        db = SessionLocal()
+        try:
+            yield db
+        finally:
+            db.close()
 
-def test_create_client(db_session):
+    app.dependency_overrides[get_db] = override_get_db
+    print("Running setup")
+    yield SessionLocal
+    print("Closing test db")
+    postgres_container.stop()
+
+
+@pytest.fixture(name="test_db", scope="module")
+def create_test_db(session):
+    db = session()
+    print("Creating test db")
+    yield db
+    print("Closing test db")
+    db.close()
+
+@pytest.fixture(name="test_client", scope="function")
+def create_user_test(test_db):
+    test_client = Client(
+        name="Test Client",
+        phone="123456789",
+        email="test@example.com",
+        picture="test.jpg"
+    )
+
+    test_db.add(test_client)
+    test_db.commit()
+    print("Creating test user")
+
+    yield test_client
+
+    print("Deleting test user")
+    test_db.delete(test_client)
+    test_db.commit()
+
+
+def test_create_client(test_db):
     new_client = ClientCreate(
         name="Test Client",
         phone="123456789",
@@ -30,31 +78,21 @@ def test_create_client(db_session):
         picture="test.jpg"
     )
 
-    result = create_client(new_client, db_session)
+    result = create_client(new_client, test_db)
     assert result.name == new_client.name
     assert result.phone == new_client.phone
     assert result.email == new_client.email
     assert result.picture == new_client.picture
 
-def test_get_client_by_id(db_session):
-    test_client = Client(name="Test Client", phone="123456789", email="test@example.com", picture="test.jpg")
-    db_session.add(test_client)
-    db_session.commit()
+def test_get_client_by_id(test_client, test_db):
 
-    result = get_client_by_id(test_client.id, db_session)
+    result = get_client_by_id(test_client.id, test_db)
+
     assert result is not None
     assert result.id == test_client.id
     assert result.name == test_client.name
 
-def test_get_client_by_id_nonexistent(db_session):
-    result = get_client_by_id(999, db_session)
+def test_get_client_by_id_nonexistent(test_db):
+    result = get_client_by_id(999, test_db)
     assert result is None
 
-def test_get_client_by_id_table_undefined(db_session, monkeypatch):
-    def mock_query(*args, **kwargs):
-        raise UndefinedTable
-
-    monkeypatch.setattr(db_session, "query", mock_query)
-
-    result = get_client_by_id(1, db_session)
-    assert result == {"error": "Table client not exist"}

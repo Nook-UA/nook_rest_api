@@ -12,7 +12,4 @@ class ClientCreate(ClientBase):
 class ClientSchema(ClientBase):
     id: int
 
-    class Config:
-        from_attributes = True
-
 
