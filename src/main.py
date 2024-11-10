@@ -7,7 +7,6 @@ from .endpoints.client import router as client_router
 from .endpoints.test import router as test_router
 from .db.create_database import create_tables
 from .db.database import SessionLocal
-from .endpoints.authentication import router as auth_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -40,7 +39,6 @@ app.add_middleware(
 # TODO: Define set ofendpoints here like this:
 # app.include_router(<name of the set of endpoints>, tags=["<tag name>"], prefix="/<prefix>")
 
-app.include_router(router=auth_router, prefix="/api")
 app.include_router(park_router)
 app.include_router(client_router)
 """ Demonstration router for testing purposes of jwt token verification"""
