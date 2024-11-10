@@ -1,10 +1,7 @@
 from sqlalchemy.orm import Session
-from fastapi import Depends
 
 from ..models.park import Park
 from ..schemas.park import ParkCreate
-
-from ..db.database import get_db
 
 from psycopg2.errors import UndefinedTable
 
@@ -13,7 +10,7 @@ error_message = {"error": "Table park not exist"}
 #------------------------------------------------
 
 
-def create_park(park: ParkCreate, db: Session = Depends(get_db)):
+def create_park(park: ParkCreate, db: Session):
     try:
         db_park = Park(
             name=park.name,
@@ -33,7 +30,7 @@ def create_park(park: ParkCreate, db: Session = Depends(get_db)):
         return {"error": str(e)}
 
 
-def get_park_by_id(park_id: int, db: Session = Depends(get_db)):
+def get_park_by_id(park_id: int, db: Session):
     try:
         return db.query(Park).filter(Park.id == park_id).first()
     except UndefinedTable:
@@ -41,7 +38,7 @@ def get_park_by_id(park_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         return {"error": str(e)}
     
-def get_park_by_owner_id(owner_id: int, db: Session = Depends(get_db)):
+def get_park_by_owner_id(owner_id: int, db: Session):
     try:
         return db.query(Park).filter(Park.owner == owner_id).all()
     except UndefinedTable:
@@ -49,7 +46,7 @@ def get_park_by_owner_id(owner_id: int, db: Session = Depends(get_db)):
     except Exception as e:
         return {"error": str(e)}
 
-def get_parks(db: Session = Depends(get_db)):
+def get_parks(db: Session):
     try:
         return db.query(Park).all()
     except UndefinedTable:

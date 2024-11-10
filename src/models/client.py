@@ -13,7 +13,7 @@ class Client(Base):
     
     __tablename__ = "client"
     
-    id = Column("id", Integer, Identity(start=1, increment=1), primary_key=True)
+    id = Column("id", Integer, Identity(start=1, increment=1), primary_key=True, index=True)
     name = Column("name", String)
     phone = Column("phone", String)
     email = Column("mail", String)

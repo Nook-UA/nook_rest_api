@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 from .client import ClientSchema
+from typing import Optional
 
 
 class Park(BaseModel):
-    id: int
     name: str
-    picture: str
-    location: str
+    picture: Optional[bytes] = None
+    location: str 
     total_spots: int
     rtsp_url: str
     owner: int

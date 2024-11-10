@@ -11,5 +11,5 @@ class Park(Base):
     picture = Column("picture", LargeBinary)
     location = Column("location", String)
     total_spots = Column("total_spots", Integer)
-    rtsp_url = Column("rtsp_url", String)
+    rtsp_url = Column("rtsp_url", String, nullable=True)
     owner = Column(Integer, ForeignKey("client.id"))
