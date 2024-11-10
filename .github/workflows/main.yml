@@ -24,6 +24,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Create .env file
+        run: |
+          echo "DB_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "DB_NAME=${{ secrets.MYSQL_DATABASE }}" >> .env
+          echo "DB_USER=${{ secrets.MYSQL_USER }}" >> .env
+        shell: bash
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -37,6 +44,9 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install --no-interaction
+
+      - name: Setup Docker
+        run: docker compose -f docker-compose.yml up -d
 
       - name: Run tests using tox
         run: poetry run tox -e coverage
