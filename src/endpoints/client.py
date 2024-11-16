@@ -16,5 +16,5 @@ def get_client(id_token = Depends(cognito_jwt_authorizer_id_token), session: Ses
         new_client = ClientCreate(id=id_token["sub"], name=id_token["cognito:username"], email=id_token["email"])
         client = create_client(new_client, session)
 
-    response = ClientResponse(name=client.name, email=client.email)
+    response = ClientResponse.from_client(client)
     return response

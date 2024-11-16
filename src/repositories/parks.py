@@ -10,15 +10,15 @@ error_message = {"error": "Table park not exist"}
 #------------------------------------------------
 
 
-def create_park(park: ParkCreate, db: Session):
+def create_park(park: ParkCreate, owner_id: str, db: Session):
     try:
         db_park = Park(
             name=park.name,
             picture=park.picture,
-            location=park.location,
-            total_spots=park.total_spots,
+            latitude=park.latitude,
+            longitude=park.longitude,
             rtsp_url=park.rtsp_url,
-            owner=park.owner
+            owner_id=owner_id
         )
         db.add(db_park)
         db.commit()
@@ -38,9 +38,9 @@ def get_park_by_id(park_id: int, db: Session):
     except Exception as e:
         return {"error": str(e)}
     
-def get_park_by_owner_id(owner_id: int, db: Session):
+def get_parks_by_owner_id(owner_id: int, db: Session):
     try:
-        return db.query(Park).filter(Park.owner == owner_id).all()
+        return db.query(Park).filter(Park.owner_id == owner_id).all()
     except UndefinedTable:
         return error_message
     except Exception as e:
