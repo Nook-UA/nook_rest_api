@@ -1,4 +1,4 @@
-FROM python:3.12.7-alpine
+FROM python:3.12.7
 WORKDIR /backend
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade -r /backend/requirements.txt
