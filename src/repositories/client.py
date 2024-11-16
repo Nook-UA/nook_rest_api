@@ -3,25 +3,23 @@ from fastapi import Depends
 
 from ..models.client import Client
 from ..schemas.client import ClientCreate
-from ..db.database import get_db
 
 from psycopg2.errors import UndefinedTable
 
-def get_client_by_id(client_id: int, db: Session = Depends(get_db)):
+def get_client_by_id(client_id: str, db: Session) -> Client:
     try:
         return db.query(Client).filter(Client.id == client_id).first()
     except UndefinedTable:
-        return {"error": "Table client not exist"}
+        return {"error": "Table client does not exist"}
     except Exception as e:
         return {"error": str(e)}
 
-def create_client(client: ClientCreate, db: Session = Depends(get_db)):
+def create_client(client: ClientCreate, db: Session) -> Client:
 
     db_client = Client(
+        id = client.id,
         name = client.name,
-        phone = client.phone,
         email = client.email,
-        picture = client.picture,
     )
 
     db.add(db_client)

@@ -2,7 +2,6 @@ from fastapi import APIRouter, HTTPException, Depends
 from ..schemas.park import Park, ParkCreate
 from ..db.database import get_db
 from sqlalchemy.orm import Session
-from .client import clients
 from ..repositories.parks import get_park_by_id, get_parks, get_park_by_owner_id, create_park
 from ..repositories.client import get_client_by_id
 from http import HTTPStatus

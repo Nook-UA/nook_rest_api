@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from .client import ClientSchema
 from typing import Optional
 
 
