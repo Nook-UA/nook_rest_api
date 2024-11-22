@@ -52,11 +52,17 @@ def create_test_db(session):
 
 @pytest.fixture(name="test_client", scope="function")
 def create_user_test(test_db):
+
+    try:
+        test_db.query(Client).delete()
+        test_db.commit()
+    except:
+        test_db.rollback()
+
     test_client = Client(
+        id="some_id_1",
         name="Test Client",
-        phone="123456789",
-        email="test@example.com",
-        picture="test.jpg"
+        email="test@example.com"
     )
 
     test_db.add(test_client)
@@ -72,17 +78,15 @@ def create_user_test(test_db):
 
 def test_create_client(test_db):
     new_client = ClientCreate(
+        id="some_id_2",
         name="Test Client",
-        phone="123456789",
         email="test@example.com",
-        picture="test.jpg"
     )
 
     result = create_client(new_client, test_db)
+    assert result.id == new_client.id
     assert result.name == new_client.name
-    assert result.phone == new_client.phone
     assert result.email == new_client.email
-    assert result.picture == new_client.picture
 
 def test_get_client_by_id(test_client, test_db):
 
@@ -93,6 +97,6 @@ def test_get_client_by_id(test_client, test_db):
     assert result.name == test_client.name
 
 def test_get_client_by_id_nonexistent(test_db):
-    result = get_client_by_id(999, test_db)
+    result = get_client_by_id("id_whatever", test_db)
     assert result is None
 

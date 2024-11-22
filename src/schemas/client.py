@@ -1,15 +1,15 @@
 from pydantic import BaseModel
+from ..models.client import Client
 
 class ClientBase(BaseModel):
     name: str
-    phone: str
     email: str
-    picture: str
 
 class ClientCreate(ClientBase):
-    pass
+    id: str
 
-class ClientSchema(ClientBase):
-    id: int
+class ClientResponse(ClientBase):
+    def from_client(client: Client):
+        return ClientResponse(name=client.name, email=client.email)
 
 

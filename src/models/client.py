@@ -13,14 +13,12 @@ class Client(Base):
     
     __tablename__ = "client"
     
-    id = Column("id", Integer, Identity(start=1, increment=1), primary_key=True)
-    name = Column("name", String)
-    phone = Column("phone", String)
-    email = Column("mail", String)
-    picture = Column(String)
-    
+    id = Column(String, primary_key=True, index=True)  # Use Cognito's "sub" as primary key
+    name = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False)
+
     # client = relationship("Client", back_populates="client")
         
     def __repr__(self):
-        return f"<Client(id={self.id}, name={self.name}, phone={self.phone}, email={self.email}, picture={self.picture})>"
+        return f"<Client(id={self.id}, name={self.name}, email={self.email})>"
     

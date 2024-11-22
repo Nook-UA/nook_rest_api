@@ -1,9 +1,0 @@
-{
-  "version": "1",
-  "name": "Nook-API-Manual-Tests",
-  "type": "collection",
-  "ignore": [
-    "node_modules",
-    ".git"
-  ]
-}
