@@ -17,7 +17,12 @@ class ParkResponse(Park):
 
     def from_park(park: Park):
         return ParkResponse(id=park.id, name=park.name, picture=park.picture, latitude=park.latitude, longitude=park.longitude, rtsp_url=park.rtsp_url)
-
+    
+class NearbyParkResponse(Park):
+    distance: float
+    
+    def from_park(park: Park, distance: float):
+        return NearbyParkResponse(id=park.id, name=park.name, picture=park.picture, latitude=park.latitude, longitude=park.longitude, rtsp_url=park.rtsp_url, distance=distance)
 
 # send to detection micrserv
 #  rtsp_url -> url do feed de video
