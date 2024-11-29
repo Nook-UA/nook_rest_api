@@ -26,7 +26,6 @@ def get_nearby_parks_endpoint(lat: float, lon: float, max_dist: float = 1, sessi
     
     for park in parks:
         distance = distance_between_coordinates(lat, lon, park.latitude, park.longitude)
-        print(park.name, distance, lat, lon, park.latitude, park.longitude)
         if distance < max_dist:
             nearby_parks.append(NearbyParkResponse.from_park(park, distance))
     
@@ -39,14 +38,13 @@ def get_parks_endpoint(id_token = Depends(cognito_jwt_authorizer_id_token), sess
     assert client_exists(client_id, session)
 
     parks = get_parks_by_owner_id(client_id, session)
-    print(parks)
     response = [ParkResponse.from_park(park) for park in parks]
     return response
 
 @router.get("/{park_id}")
 def get_park_endpoint(park_id: int, id_token = Depends(cognito_jwt_authorizer_id_token), session: Session = Depends(get_db)) -> ParkResponse:
     park = get_park_by_id(park_id, session)
-    print(park)
+    
     if not park:
         raise HTTPException(HTTPStatus.NOT_FOUND, detail=f"Park with id '{park_id}' does not exist")
 
