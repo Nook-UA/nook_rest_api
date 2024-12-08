@@ -17,4 +17,7 @@ class Settings:
         self.db_port = os.getenv("DB_PORT")
         self.db_name = os.getenv("DB_NAME")
 
+        # Configs of the ParkService
+        self.park_service_url = os.getenv("PARKSERVICE_URL")
+
 settingObj = Settings()
