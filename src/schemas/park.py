@@ -1,6 +1,8 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from ..models.park import Park
+from ..schemas.parking_spot import ParkingSpotResponse
+
 
 class Park(BaseModel):
     name: str
@@ -9,20 +11,43 @@ class Park(BaseModel):
     longitude: Optional[float] = None
     rtsp_url: Optional[str] = None
 
+
 class ParkCreate(Park):
     pass
 
+
 class ParkResponse(Park):
     id: int
+    parking_spots: List[ParkingSpotResponse] = []
 
+    @staticmethod
     def from_park(park: Park):
-        return ParkResponse(id=park.id, name=park.name, picture=park.picture, latitude=park.latitude, longitude=park.longitude, rtsp_url=park.rtsp_url)
-    
+        return ParkResponse(
+            id=park.id,
+            name=park.name,
+            picture=park.picture,
+            latitude=park.latitude,
+            longitude=park.longitude,
+            rtsp_url=park.rtsp_url,
+            parking_spots=[ParkingSpotResponse.from_parking_spot(spot) for spot in park.parking_spots]
+        )
+
+
 class NearbyParkResponse(Park):
     distance: float
-    
+
+    @staticmethod
     def from_park(park: Park, distance: float):
-        return NearbyParkResponse(id=park.id, name=park.name, picture=park.picture, latitude=park.latitude, longitude=park.longitude, rtsp_url=park.rtsp_url, distance=distance)
+        return NearbyParkResponse(
+            id=park.id,
+            name=park.name,
+            picture=park.picture,
+            latitude=park.latitude,
+            longitude=park.longitude,
+            rtsp_url=park.rtsp_url,
+            distance=distance,
+        )
+
 
 # send to detection micrserv
 #  rtsp_url -> url do feed de video
