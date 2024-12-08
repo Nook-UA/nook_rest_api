@@ -2,6 +2,9 @@ from fastapi import APIRouter, HTTPException, Depends
 from http import HTTPStatus
 from sqlalchemy.orm import Session
 
+import requests
+from settings import settingObj
+
 from ..schemas.park import Park, ParkCreate, ParkResponse, NearbyParkResponse
 from ..db.database import get_db
 from ..repositories.parks import get_park_by_id, get_parks, get_parks_by_owner_id, create_park
@@ -63,7 +66,13 @@ def create_park_endpoint(park: ParkCreate, id_token = Depends(cognito_jwt_author
     
     try:
         created_park = create_park(park, client_id, session)
-        response = ParkResponse.from_park(created_park)
-        return response
+        response_park = ParkResponse.from_park(created_park)
+
+        # try post to park detection
+        added_park_response = requests.post(settingObj.park_service_url + "add_parking_lot",{"id":response_park.id,"rstp_url":response_park.rtsp_url})
+        if (not added_park_response.ok):
+            print("Park detection was not informed about creation of park:{}".format(response_park.id))
+
+        return response_park
     except Exception as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, detail=str(e))
