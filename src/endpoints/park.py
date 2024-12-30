@@ -75,7 +75,7 @@ def create_park_endpoint(park: ParkCreate, id_token = Depends(cognito_jwt_author
         }
         added_park_response = requests.post(settingObj.park_service_url + "/add_parking_lot",json=body)
         if (not added_park_response.ok):
-            print("Park detection was not informed about creation of park:{}".format(response_park.id))
+            raise HTTPException(HTTPStatus.BAD_REQUEST, detail=f"Error adding parking lot to the parking detection")
 
         return response_park
     except Exception as e:
@@ -97,7 +97,13 @@ def add_parking_spots_endpoint(park_id: int, spots: list[ParkingSpotCreate], id_
     if spots == []:
         raise HTTPException(HTTPStatus.BAD_REQUEST, detail=f"List of Parking Spots is empty")
     
-    try:
+    try:        
+        existing_spots = [{"name":spot.name, "points":spot.get_points()} for spot in park.parking_spots]
+        all_spots = [{"name":spot.name, "points":spot.points} for spot in spots] + existing_spots
+        response = requests.post(settingObj.park_service_url + f"/parking_lot/{park_id}/spots", json=all_spots)
+        if (not response.ok):
+            raise HTTPException(HTTPStatus.BAD_REQUEST, detail=f"Error adding spots to the parking detection")
+        
         add_parking_spots(park_id, spots, session)
         return ParkResponse.from_park(get_park_by_id(park_id, session))
     except Exception as e:
@@ -116,7 +122,11 @@ def set_parking_spots_endpoint(park_id: int, spots: list[ParkingSpotCreate], id_
     if park.owner_id != client_id:
         raise HTTPException(HTTPStatus.FORBIDDEN, detail=f"Client does not own this park")
     
-    try:
+    try:        
+        all_spots = [{"name":spot.name, "points":spot.points} for spot in spots]
+        added_spots_response = requests.post(settingObj.park_service_url + f"/parking_lot/{park_id}/spots", json=all_spots)
+        if (not added_spots_response.ok):
+            raise HTTPException(HTTPStatus.BAD_REQUEST, detail=f"Error adding spots to the parking detection")
         
         if spots == []:
             clear_parking_spots(park_id, session)
@@ -124,5 +134,6 @@ def set_parking_spots_endpoint(park_id: int, spots: list[ParkingSpotCreate], id_
             set_parking_spots(park_id, spots, session)
         
         return ParkResponse.from_park(get_park_by_id(park_id, session))
+        
     except Exception as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, detail=str(e))
