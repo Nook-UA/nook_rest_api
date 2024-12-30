@@ -35,7 +35,8 @@ class ParkResponse(Park):
 
 class NearbyParkResponse(Park):
     distance: float
-
+    parking_spots: List[ParkingSpotResponse] = []
+    
     @staticmethod
     def from_park(park: Park, distance: float):
         return NearbyParkResponse(
@@ -46,6 +47,7 @@ class NearbyParkResponse(Park):
             longitude=park.longitude,
             rtsp_url=park.rtsp_url,
             distance=distance,
+            parking_spots=[ParkingSpotResponse.from_parking_spot(spot) for spot in park.parking_spots]
         )
 
 
