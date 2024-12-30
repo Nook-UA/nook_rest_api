@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from http import HTTPStatus
 from sqlalchemy.orm import Session
+import json
 
 import requests
 from ..settings import settingObj
@@ -35,6 +36,16 @@ def get_nearby_parks_endpoint(lat: float, lon: float, max_dist: float = 1, sessi
             nearby_parks.append(NearbyParkResponse.from_park(park, distance))
     
     return nearby_parks
+
+@router.get("/{park_id}/info")
+def get_park_info_endpoint(park_id: int, session: Session = Depends(get_db)):
+
+    park = get_park_by_id(park_id, session)
+    
+    if not park:
+        raise HTTPException(HTTPStatus.NOT_FOUND, detail=f"Park with id '{park_id}' does not exist")
+    
+    return json.loads(requests.get(settingObj.park_service_url + f"/parking_lot/{park_id}").content)
 
 @router.get("")
 def get_parks_endpoint(id_token = Depends(cognito_jwt_authorizer_id_token), session: Session = Depends(get_db)) -> list[ParkResponse]:
