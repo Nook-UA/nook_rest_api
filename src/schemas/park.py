@@ -34,6 +34,7 @@ class ParkResponse(Park):
 
 
 class NearbyParkResponse(Park):
+    id: int
     distance: float
     parking_spots: List[ParkingSpotResponse] = []
     
