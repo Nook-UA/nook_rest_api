@@ -20,4 +20,7 @@ class Settings:
         # Configs of the ParkService
         self.park_service_url = os.getenv("PARKSERVICE_URL")
 
+        #S3
+        self.s3_url = os.getenv("S3_URL")
+
 settingObj = Settings()
