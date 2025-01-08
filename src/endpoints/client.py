@@ -6,7 +6,7 @@ from ..schemas.client import ClientCreate, ClientResponse
 from ..repositories.client import create_client, get_client_by_id
 from ..auth import cognito_jwt_authorizer_id_token
 
-router = APIRouter(prefix="/client")
+router = APIRouter(prefix="/client", tags=["client"])
 
 @router.get("")
 def get_client(id_token = Depends(cognito_jwt_authorizer_id_token), session: Session = Depends(get_db)) -> ClientResponse:

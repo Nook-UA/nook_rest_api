@@ -8,7 +8,7 @@ class Park(Base):
 
     id = Column(Integer, Identity(start=1, increment=1), primary_key=True)
     name = Column(String, nullable=False)
-    picture = Column(LargeBinary, nullable=True)
+    picture = Column(String, nullable=True)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     rtsp_url = Column(String, nullable=True)

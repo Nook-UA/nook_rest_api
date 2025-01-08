@@ -57,7 +57,7 @@ def test_create_client(mock_dependencies):
     # Simulate the behavior when the `get_client_by_id` doesn't find the client
     mock_dependencies.query.return_value.filter.return_value.first.side_effect = [None, mock_client]
 
-    response = client.get("/client")
+    response = client.get("/api/client")
     
     assert response.status_code == 200
     assert response.json() == ClientResponse.from_client(mock_client).model_dump()
@@ -66,7 +66,7 @@ def test_get_client(mock_dependencies):
     # Simulate the behavior when the `get_client_by_id` finds the client
     mock_dependencies.query.return_value.filter.return_value.first.side_effect = [mock_client]
 
-    response = client.get("/client")
+    response = client.get("/api/client")
     
     assert response.status_code == 200
     assert response.json() == ClientResponse.from_client(mock_client).model_dump()

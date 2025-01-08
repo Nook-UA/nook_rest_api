@@ -2,11 +2,12 @@ from pydantic import BaseModel
 from typing import Optional, List
 from ..models.park import Park
 from ..schemas.parking_spot import ParkingSpotResponse
+from ..settings import settingObj
 
 
 class Park(BaseModel):
     name: str
-    picture: Optional[bytes] = None
+    picture: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     rtsp_url: Optional[str] = None
@@ -25,7 +26,7 @@ class ParkResponse(Park):
         return ParkResponse(
             id=park.id,
             name=park.name,
-            picture=park.picture,
+            picture=str(settingObj.s3_url) + str(park.picture),
             latitude=park.latitude,
             longitude=park.longitude,
             rtsp_url=park.rtsp_url,
@@ -43,7 +44,7 @@ class NearbyParkResponse(Park):
         return NearbyParkResponse(
             id=park.id,
             name=park.name,
-            picture=park.picture,
+            picture=str(settingObj.s3_url) + str(park.picture),
             latitude=park.latitude,
             longitude=park.longitude,
             rtsp_url=park.rtsp_url,

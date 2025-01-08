@@ -38,11 +38,10 @@ app.add_middleware(
 
 # TODO: Define set ofendpoints here like this:
 # app.include_router(<name of the set of endpoints>, tags=["<tag name>"], prefix="/<prefix>")
-
-app.include_router(park_router)
-app.include_router(client_router)
+app.include_router(park_router, prefix="/api")
+app.include_router(client_router, prefix="/api")
 """ Demonstration router for testing purposes of jwt token verification"""
-app.include_router(test_router)
+app.include_router(test_router, prefix="/api")
 
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):
@@ -51,6 +50,6 @@ async def db_session_middleware(request: Request, call_next):
     request.state.db.close()
     return response
 
-@app.get("/")
+@app.get("/api")
 def root():
-    return {"message": "I want something good to die for. To make it beautiful to live"}
+    return {"message": "health check"}
