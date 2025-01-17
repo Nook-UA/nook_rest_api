@@ -7,6 +7,13 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+env:
+  USER_NAME: test_user
+  PASSWORD: test_pass
+  HOST: localhost
+  PORT: 5432
+  DATABASE_NAME: test_db
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,23 +23,32 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Create .env file
+        run: |
+          echo "DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+          echo "DB_NAME=${{ secrets.POSTGRES_DB }}" >> .env
+          echo "DB_USER=${{ secrets.POSTGRES_USER }}" >> .env
+          echo "DB_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.POSTGRES_PORT }}" >> .env
+        shell: bash
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+
+      - name: Install Poetry
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Lint with Ruff
+          pip install poetry
+
+      - name: Install dependencies
         run: |
-          pip install ruff
-          ruff --format=github --target-version=py312 .
-        continue-on-error: true
-      - name: Test with pytest
-        run: |
-          cd /tests
-          coverage run -m pytest -v -s
-      - name: Generate Coverage Report
-        run: |
-          coverage report -m
+          poetry install --no-interaction
+
+      - name: Setup Docker
+        run: docker compose -f docker-compose.yml up -d
+
+      - name: Run tests using tox
+        run: poetry run tox -e coverage
